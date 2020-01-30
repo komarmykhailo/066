@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+
+  #Multi-Machine config
+  config.vm.define "ubuntuVM" do |ubuntuVM|
+  ubuntuVM.vm.box = "ubuntu/bionic64"
+  ubuntuVM.vm.network "private_network", ip: "192.168.1.102"
+  ubuntuVM.vm.network "forwarded_port", guest: 80, host: 8080
+  ubuntuVM.vm.provision "shell", run: "always", inline: <<-SHELL
+    apt-get update
+    apt-get install -y apache2
+  SHELL
+  end
+ 
+  config.vm.define "centosVM" do |centosVM|
+  centosVM.vm.box = "generic/centos7"
+  end
+
+  config.vm.box = "base"
+
+end
